@@ -1,1 +1,1 @@
-# how-to-hint-non-latin-variable-fonts
+# how-to-hint-non-latin-variable-fonts-in-VTT
