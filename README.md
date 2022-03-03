@@ -27,18 +27,32 @@ When thinking about adding hinting to any Variable font, it is a good idea to as
 As an example of Hinting Non Latin Variable fonts, we will be looking at adding and fine tuning hinting for some key representative glyphs in the Noto Devanagari Serif Variable font. The workflow and concepts discussed for the Devanagari font, can be used for other Non-Latin Variable fonts that support different scripts. 
 
 **Is hinting suitable for my font?**
-Once you know more about what hinting is capable of, you can then ask a few questions about the font itself. Is the font intended for reading at smaller sizes or is it primarily a Display font, intended for use at larger sizes? What benefits can I expect by adding hinting? 
+Once you know more about what hinting is capable of, you can then ask a few questions about the font itself. Is the font intended for reading at smaller sizes or is it primarily a Display font, intended for use at larger sizes? What benefits can I expect by adding hinting? How complex are the outline shapes? Many complex scripts fonts can benefit from hinting particularly at smaller sizes. For some scripts, such as Chinese, Japanese and Korean for example, the complexity of the outlines makes it impossible to apply hints that will benefit smaller sizes. Once there are enought pixels at larger sizes, hinting can help to sharpen common horizontal strokes and reduce blur. Every font should be evaluated to begin with to determine the most appropriate hinting stragety. 
 
 We will look at these questions as we progress through this document, and will also look at the different approaches to hinting individual glyphs, and some of the limitations of Hinting Variable fonts in VTT.
 
-## Hinting Noto Devanagari Serif 
+## Case Study: Hinting Noto Devanagari Serif Variable font
+
+For the remainer of this document we will look at adding hinting to the Noto Serif Devanagari Variable font. All of the processes and workflow can be followed and adapted for other comple script Variable fonts. A good way to begin, to evaluate the overall effects of hinting, is to run the VTT Autohinter, and review the output.
 
 **Determining benefits of Hinting by running the Autohinter**
 
-Sharpenening of horizontal strokes at smaller screen sizes on lower resolution screens is one of the main effects of hinting. This sharpening significantly reduces blur along key horizontal strokes, producing much sharper text. 
+Sharpenening of horizontal strokes at smaller screen sizes on lower resolution screens is one of the main effects of modern hinting. This sharpening significantly reduces blur along key horizontal strokes, producing much sharper text at smaller sizes. 
 
-Running the VTT Autohinter and quickly reviewing the results will give you a good impression of the big picture of how hinting will help to render the font at small screen sizes particularly in relation to the key horizontals in the Devanagari font. By evaluating the initial results produced by the Autohinter, you can then use this to build on refining the code. 
+Running the VTT Autohinter and quickly reviewing the results will give you a good impression of the big picture of how hinting will help to render the font at small screen sizes particularly in relation to the key horizontals in the Devanagari font. By evaluating the initial results produced by the Autohinter, you can determine the benifits of hinting and to then build on refining the hinting code. 
 
-(Add Graphic simple example one stroke)
+<img width="100%" height="100%" src="Images/BlurvSharp.png">
 
-(Insert graphic) Show highest level graphic of improvements, (graphic) horizontals blur no blur same sizes and zoom in)
+**Left** Horizonal stroke un-hinted. After the unhinted outline is scaled and rendered at a particault size, the result is very often a blurred line.
+**Right** Horizonal stroke hinted. The Autohinter uses a stragety to move the outline to a high contrast grid boundary.
+
+Folowing on from this basic idea, we can now see how this hinting effect, improves the rendering overall for many of the main Devanagari glyphs.
+
+<img width="100%" height="100%" src="Images/DevanagariBlurSharp.png">
+
+**Key Horizonal sharpening** Hinting results in sharpening of main Horizontal stokes, shown here using representative Devanagari glyphs at 9 and 12 point @96dpi
+
+
+<img width="100%" height="100%" src="Images/WeightBlurSharp.png">
+
+**Improvements across Variation space** One set of of hinting code is applied to all weight variations in the Variable font, result in sharpening of main Horizontal stokes for all weights. 
