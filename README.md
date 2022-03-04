@@ -56,3 +56,15 @@ Folowing on from this basic idea, we can now see how this hinting effect, improv
 <img width="100%" height="100%" src="Images/WeightBlurSharp.png">
 
 **Improvements across Variation space** One set of of hinting code is applied to all weight variations in the Variable font, resulting in sharpening of main Horizontal stokes for all weights. 
+
+## Hinting : Hinting Devanagari letter GA' (U+0917)
+
+Let’s begin by looking at how to add hinting to Devanagari letter GA. 
+
+**Hinting strategy**
+
+1. Control the y-max (Headline) and y-min of the glyph (Baseline / baseline undershoot) to be consistent with other glyphs that share the same alignment, using values in the Control Value Table as a reference. Minimise blur at the ‘Headline’.
+
+2. Control the position of the middle element, in relation to the Baseline and Headline. 
+
+![LatinAutohinter](Images/HintDevanagariOne.gif)
