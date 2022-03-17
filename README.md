@@ -57,6 +57,40 @@ Following on from this basic idea, we can now see how this hinting effect, impro
 
 **Improvements across Variation space** One set of of hinting code is applied to all weight variations in the Variable font, resulting in sharpening of main Horizontal stokes for all weights. 
 
+## Alignments and measurements
+
+<img width="100%" height="100%" src="Images/HeightsDevanagari.png">
+
+**Top:** Key heights are determined by referencing some representative glyphs in the Noto Devanagari Variable font. The measurements taken from these glyphs, will be used to set up new cvt's that be referenced in the hinting code.
+
+Referencing ‘cvt’ values from hinting instructions in a set of glyphs that share similar measurements in the Devanagari font allows strict control over the regularity of these features. For the hinting described here, new cvt’s will be used to ensure key heights are kept consistent at any given point size. When adding hints, an ‘anchor’, _(such as is added by the Autohinter)_ on any point, will be rounded to the nearest grid line. However, a YAnchor, _for example,_ can refer to a ‘cvt’ value to specify a height or overshoot shared by other glyphs in the font. Instead of rounding to the nearest grid line, the anchored point will round to the grid line specified by the ‘cvt’ value. 
+
+This is also useful for making global adjustments to heights, and proportions for a range of glyphs, by adjusting just one cvt. Global adjustments to proportions in complex script fonts, can help provide more space for Bolder weights, for example, helping to make the rendering much clearer on-screen.
+ 
+## Adding new CVT's for Devanagari 
+
+Now that we have taken some measurements from the font outlines, we can build some new cvt’s for use in hinting the Devanagari. The illustration above shows four key measurements taken from representatinve glyphs. We can add futher cvt’s when required, for any other aligment zones, that can be determined in the font.
+
+To add the new cvt’s, open the Control program, and add the following cvt entries, starting with the next available ID number, in this case cvt number 167. _(Because this font contains a Latin Subset, the Autohinter has already generated cvt’s for the Latin font)_
+
+Add four new cvt’s, for ‘Main Headline Height’, ‘Headline overshoot’, ‘Baseline’, and ‘Baseline undershoot’ using the measurements taken from the outlines. Compile and Save the Control Program. These new cvt's are now available for use, and can be referenced in the VTTTalk Hinting code. 
+
+/***** Devanagari Height cvt’s *****/
+ 
+      167:   623 /* Main Flat Headline height */
+  
+ASM("SVTCA[Y]")
+ASM("CALL[], 167, 89")
+ 
+      169:     0 /* baseline */
+ASM("SVTCA[Y]")
+ASM("CALL[], 169, 89")
+  RoundHeight
+      168:    5 ~   167 @ 42 /* cap height overshoot */
+      170:   -5 ~   169 @ 42 /* baseline undershoot */
+ 
+
+
 ## Hinting Devanagari letter GA (Unicode+0917)
 
 Let’s begin by looking at how to add hinting to Devanagari letter GA. In this example we will delete the existing Autohinting code and add the hinting via the graphical user interface. The main height controls and cvt’s added to this glyph will set the direction for adding hinting and maintaining consistent height control for other Devanagari glyphs, that share the same headline and baseline heights.
@@ -133,11 +167,11 @@ While in the VTTtalk Window, add the reference to the new Devanagari cvts that h
 
 /* Y direction */
 
-**Res**YAnchor(21 **,170**)
+**Res**YAnchor(21 **,170**)  /* baseline undershoot */
 
 YShift(21,22)
 
-**Res**YAnchor(28 **,167**)
+**Res**YAnchor(28 **,167**) /* Main Flat Headline height */
 
 YIPAnchor(21,0,28)
 
@@ -151,7 +185,7 @@ YShift(14,23)
 
 Smooth()
 
-_The hinting for GA is now complete. The glyph can be proofed in the main window, using the text string to see shape and spacing, in the size ramp to see the hinted results at a range of sizes, and in the Variation Window, to proof for all variations in the font._
+_The hinting for GA is now complete. Additional glyphs that share the same alignment can  now be hinted using the same overall stragety and referencing the same cvt values.Glyphs can be proofed in the main window, using the text string to see shape and spacing, in the size ramp to see the hinted results at a range of sizes, and in the Variation Window, to proof for all variations in the font._
 
 
 
