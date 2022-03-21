@@ -6,17 +6,17 @@ by [Michael Duggan](https://twitter.com/mickduggan)
 
 **Note:** This document is a companion piece to the longer [Hinting Latin TrueType Variable Fonts with Visual TrueType](https://github.com/googlefonts/how-to-hint-variable-fonts#introduction) 
 
-*Please refer first to this comprehensive documentation for all of the details of the workflow, detailed descriptions of the hinting code, and how to use the VTT Tool to add hinting to Variable Fonts.*  
+*Please refer first to this comprehensive documentation for all of the details of the workflow, thorough descriptions of the hinting code, and how to use the VTT Tool to add hinting to Variable Fonts.*  
 
 ## Introduction
 
-When thinking about adding hinting to any Variable font, it is a good idea to ask a few questions first. How does hinting work in modern environments? What value can hinting add? Is hinting suitable for my font? The first two questions are answered in the longer VTT Variable font Hinting document, referenced at the beginning, which gives an overview of the current rendering technologies and the main benefits of modern hinting, with a focus on Variable Font Hinting. The third question can be answered by a series of tests and proofing in VTT. 
+When thinking about adding hinting to any Variable font, its a good idea to ask a few questions before beginning. How does hinting work in modern environments? What value can hinting add? Is hinting suitable for my font? The first two questions are answered in the longer VTT Variable font Hinting document, referenced above, which gives an overview of the current rendering technologies and the main benefits of modern hinting, with a focus on Variable Font Hinting. The third question can be answered by a series of tests and proofing in VTT. 
 
-As an example of Hinting complex script Variable fonts, we will be looking at adding and fine tuning hinting for some key representative glyphs in the Noto Devanagari Serif Variable font. The workflow and concepts discussed for the Devanagari font, can be used for other complex script Variable fonts. 
+As an example of Hinting complex script Variable fonts, we will be looking at the workflow for adding and fine tuning hinting for some key representative glyphs in the Noto Devanagari Serif Variable font. The workflow and concepts discussed for the Devanagari font, can be used for other complex script Variable fonts. 
 
 **Notes on running the VTT Autohinter for complex script Variable Fonts**
 
-Before beginning any new Hinting project, it is important to understand the options and requirements for running the VTT Autohinter for complex script Variable fonts. The Visual TrueType tool has the following options for Autohinting.
+Before beginning any new Hinting project, it is also important to understand the options and requirements for running the VTT Autohinter for complex script Variable fonts. The Visual TrueType tool has the following options for Autohinting.
 
 **(1) Light Latin Autohinter:** Designed to work for Latin fonts, including Greek and Cyrillic. This option can also be used to add hinting to complex script fonts. **Note:** To run the VTT Light Latin Autohinter, for complex script fonts, VTT requires that the font must contain at least the Latin Ascii glyph set. If there is no Latin Ascii glyph set, the Light Latin Autohinter will not run, and will return an error message. (Unicode 0x48 (H) is missing in this font). 
 
@@ -164,13 +164,13 @@ Choose the YShift tool. Position the _‘blue circle’_, directly over point 0 
 **YShift(0,7)**
 Shifts point 7, to a new position, relative to point 0’s new position on the grid, maintaining the same relative distance between the point 0 and point 7 as is in the original high resolution design of the outline. The shift command does not reference a cvt value and does not move the hinted point 7 to a full pixel grid line. Shift also does not default to a one pixel minimum used by the Link command. Using the Shift command will maintain a balanced visual weight, of horizontal features in particular, across all variations. 
 
-**Step 5: Adding the Res command and Devanagari reference cvt's** 
+**Step 5: Adding the Res command and Devanagari reference cvt’s** 
 
 _The Res addition to the command ResAnchor, for example, stands for Rendering Environment Specific, and ensures that the appropriate rounding happens, for various rendering environments. This saves adding additional Hinting commands if Hinting is required to work in a variety of rendering environments. _The Res command calls a Function, that is designed to also allow for more subtle rendering of features such as undershoots and overshoots_
 
-Switch to the VTTtalk window** (`ctrl + 5`). Type Res before the YAnchor commands and add the reference to the correct height cvt's at the end of the YAnchor command. Compile VTT Talk, (`ctrl + r`) and save (`ctrl + s`). 
+Switch to the VTTtalk window** (`ctrl + 5`). Type Res before the YAnchor commands and add the reference to the correct height cvt’s at the end of the YAnchor command. Compile VTT Talk, (`ctrl + r`) and save (`ctrl + s`). 
 
-While in the VTTtalk Window, add the reference to the new Devanagari cvts that have been defined in the Control Value table. The final VTTtalk code, for the GA glyph, in the VTTtalk window will appear like this. The Res commands and cvts are highlighted here. After appending the Res commands to the YAnchors and adding the cvt’s, compile the VTTtalk window and save. 
+While in the VTTtalk Window, add the reference to the new Devanagari cvt’s that have been defined in the Control Value table. The final VTTtalk code, for the GA glyph, in the VTTtalk window will appear like this. The Res commands and cvt’s are highlighted here. After appending the Res commands to the YAnchors and adding the cvt’s, compile the VTTtalk window and save. 
 
 /* Y direction */
 
@@ -193,6 +193,26 @@ YShift(14,23)
 Smooth()
 
 _The hinting for GA is now complete. Additional glyphs that share the same alignment can  now be hinted using the same overall stragety and referencing the same cvt values.Glyphs can be proofed in the main window, using the text string to see shape and spacing, in the size ramp to see the hinted results at a range of sizes, and in the Variation Window, to proof for all variations in the font._
+
+**Pro Tips** 
+
+**Notes on adding new cvt’s**
+
+When adding new hinting code from scratch, or when editing the output from the Autohinter, choose the option under `Display > Options > VTT Attributes` > **Show CVT numbers.** 
+
+When new cvt’s are added and the code is compiled in the VTTtalk code, _(as shown in the animation above)_ the cvt numbers will be shown graphically in the main window. As you progress through hinting the glyph set, showing cvt numbers allows for easier visual proofing of the hinted glyphs in the Main Window, for example to quickly determine whether the correct cvt’s are used for heights. 
+
+**Notes on Character Group information and adding new cvt’s**
+
+Each glyph in a font has Character group information associated with it. The character group tells VTT which group of values to use from the Control Value Table. When hinting complex fonts, such as Devanagari, the Character group information is usually listed as ‘Other’. _(The Character group information is listed at the top of the Main Window, after the Unicode Value for the glyph. The categories are UpperCase, LowerCase, Figure, Reserved 1,2 & 3, Anygroup, Other)._ 
+
+The VTT Autohinter generates cvt’s for the Other group. When hinting a glyph from scratch using the Visual Hinting tools, VTT uses the character group information to pick cvt’s YAnchors for example. When the character group is set to ‘Other’, VTT will look for the cvt’s defined as ‘Other’ in the cvt table, and will add these automatically. To avoid this happening, you can change the character group information for the glyph you are hinting to ‘Anygroup’.
+
+**To change the character group information of the current glyph**
+
+`Edit > Change char group` or press ctrl + U, until ‘Anygroup’ is listed, then choose File and save.  
+
+When the Character Group info is set to ‘Anygroup’, and saved, adding the YAnchor Hinting commands for the Devanagari heights, via the graphical hinting tools, will generate a Yanchor with no cvt associated with it. You can then manually add references to the correct Devanagari cvt’s, compile and save. The alternative to this approach is to let VTT choose a cvt. You must then remember to change that cvt reference to use the correct custom script specific cvt you have creeated in the cvt table, such as the ones we created above for the Devanagari font.
 
 
 
