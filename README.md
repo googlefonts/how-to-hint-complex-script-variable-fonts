@@ -215,7 +215,17 @@ The VTT Autohinter generates cvt’s for the Other group. When hinting a glyph f
 When the Character Group info is set to ‘Anygroup’, and saved, adding the YAnchor Hinting commands for the Devanagari heights, via the graphical hinting tools, will generate a Yanchor with no cvt associated with it. You can then manually add references to the correct Devanagari cvt’s, compile and save. The alternative to this approach is to let VTT choose a cvt. You must then remember to change that cvt reference to use the correct custom script specific cvt you have creeated in the cvt table, such as the ones we created above for the Devanagari font.
 
 
+## Hinting Devanagari letter DdA (Unicode+0921)
 
+Adding Hinting for a complex Devanagari glyph. 
+
+**Hinting strategy**
+
+1. Control the y-max (Headline) and y-min to be consistent with other glyphs that share the same alignment, using values in the Control Value Table as a reference. Minimise blur at the ‘Headline’, and y-min of the glyph
+
+2. Control the position of the middle elements, in relation to the y-min and Headline. The main advantages of adding hinting to this glyph will be to ensure that the top and bottom of the glyph are moved to a sharp alignment. Because we have to use only one set of hints for all of the variation weights, from Light to Black, control of the middle is done by interpolation only. This will ensure that the overall shape of the glyph is correctly maintained. 
+
+![LatinAutohinter](Images/HintDevanagariTwo.gif)
 
 
 
