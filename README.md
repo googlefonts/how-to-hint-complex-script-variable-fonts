@@ -57,6 +57,13 @@ Following on from this basic idea, we can now see how this hinting effect, impro
 
 **Improvements across Variation space** One set of of hinting code is applied to all weight variations in the Variable font, resulting in sharpening of main Horizontal stokes for all weights. 
 
+<img width="100%" height="100%" src="Images/Nohinthintcomparison.png">
+
+**Devanagari text sample** 
+
+Text Sample comparing hinted to unhinted / typeset at Axis-praxis.org / Universal Declaration of Human Rights / NotoSerifDevanagariVF_Demo.ttf, 15px, 11point@96dpi, Google Chrome (Version 99.0.4844.51) / Windows 11 / Direct Write Rendering / Consistent sharpening and alignment along Headling of all Devanagari glyphs. Key details are kept clear on-screen at smaller text sizes
+
+
 ## Alignments and measurements
 
 <img width="100%" height="100%" src="Images/HeightsDevanagari.png">
