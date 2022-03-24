@@ -1,8 +1,6 @@
 # A guide to hinting complex script Variable Fonts with Visual TrueType
 
-by [Michael Duggan](https://twitter.com/mickduggan)
-
-## Hinting complex script Variable fonts in VTT (Visual TrueType) 
+by [Michael Duggan](https://twitter.com/mickduggan), in collaboration with Kalapi Gajjar-Bordawekar 
 
 **Note:** This document is a companion piece to the longer [Hinting Latin TrueType Variable Fonts with Visual TrueType](https://github.com/googlefonts/how-to-hint-variable-fonts#introduction) 
 
@@ -235,4 +233,31 @@ Adding Hinting for a complex Devanagari glyph.
 ![LatinAutohinter](Images/HintDevanagariTwo.gif)
 
 
+## Adjusting global proportions
 
+![LatinAutohinter](Images/HintDevanagariThree.gif)
+
+At small screen sizes there are a limited number of pixels available to describe and render more complex glyph shapes. Adjusting the overall height of the Devanagari glyphs, can help to make the shapes clearer, particularly in the heavier weights. 
+
+In this example the Main Headline Devanagari height ‘cvt’ 167, stores a measurement of 623 font units, which is the measured outline distance of the square Headline Height. 
+
+At 12 point at 72dpi / 9 point at 96dpi, this value is scaled, and rounds to the nearest pixel grid, which results in a Baseline to Headline Height of 7 pixels () 
+
+At 15 point at 72dpi / 11 point at 96dpi, this value is scaled, and rounds to the nearest pixel grid, which results in a Baseline to Headline Height of 9 pixels ()
+
+At 20 point at 72dpi / 15 point at 96dpi, this value is scaled, and rounds to the nearest pixel grid, which results in a Baseline to Headline Height of 7 pixels ()
+ 
+To change this height globally, a ‘Delta’ command is used to raise the Headline Height for all glyphs that reference the ‘cvt’ for either square or round Headline height. This Delta command raises the Headline Height by one pixel for all of the instances in the font. 
+
+**Note:** When adjusting one height, other heights should also be reviewed, and adjusted if necessary, to ensure the correct proportion is maintained, between heights.
+ 
+**Globally adjust height in the ‘cvt’ table:**
+
+Open the CVT Table (`ctrl + 4`) and refer to the ‘cvt’ for Headline Height, ‘cvt’ number 167. Directly after the ‘cvt’ type the following, Delta(1@12;15;20) and compile, ctrl ( r ) and save.
+ 
+**CVT Entry for Square Devanagari Headline Height**
+167:  1462 /* Square Headline Height */
+ 
+Delta(1@12;15;20) /* Raise Headline Height globally by 1 pixel */
+ 
+**Note:** In Variable fonts a global Delta command can only be used, if the cvt does not vary across the Variation Space. For example, a Bolder weight variation may have a larger measured outline height. This height is edited in the ‘cvar’ _(cvt variation table)_ to reflect this difference. Because of the difference in height, the bolder weight cvt, can round differently and the ‘Delta’ to change the height for the Bold may not be required.
