@@ -31,7 +31,7 @@ We will look at these questions as we progress through this document, and will a
 
 ## Case Study: Hinting Noto Devanagari Serif Variable font
 
-For the remainer of this document we will look at adding hinting to the Noto Serif Devanagari Variable font. All of the processes and workflow can be followed and adapted for other complex script Variable fonts. A good way to begin, to evaluate the overall effects of hinting, is to run the VTT Autohinter, and review the output.
+For the remainer of this document we will look at adding hinting to the Noto Serif Devanagari Variable font. Noto is a global font collection for writing in all modern and ancient languages. Noto Serif Devanagari is a modulated (“serif”) design for setting texts in the Indic Devanagari script. The Variable font supports multiple weights and widths. All of the processes and workflow can be followed and adapted for other complex script Variable fonts. A good way to begin, to evaluate the overall effects of hinting, is to run the VTT Autohinter, and review the output.
 
 **Determining benefits of Hinting by running the Autohinter**
 
@@ -104,7 +104,9 @@ ASM("CALL[], 169, 89")
 
 ## Hinting Devanagari letter GA (Unicode+0917)
 
-Let’s begin by looking at how to add hinting to Devanagari letter GA. In this example we will delete the existing Autohinting code and add the hinting via the graphical user interface. The main height controls and cvt’s added to this glyph will set the direction for adding hinting and maintaining consistent height control for other Devanagari glyphs, that share the same headline and baseline heights.
+Let’s begin by looking at how to add hinting to Devanagari letter GA. In this example we will delete the existing Autohinting code and add the hinting via the graphical user interface. The main height controls and cvt’s added to this glyph will set the direction for adding hinting and maintaining consistent height control for other Devanagari glyphs, that share the same headline and baseline heights. Many of the glyphs in the font share a common alignment. Please refer to the [demo font](https://github.com/googlefonts/how-to-hint-non-latin-variable-fonts/tree/main/VTTSourcesDemoFont) to review and study the hinting approach. The following glyphs have have been fine tuned, and cvt’s added. 
+
+**Hinted and fine tuned glyphs:** _(Gid 98 / Uni 0x0905), (Gid 102 / Uni 0x0909), (Gid 108 / Uni 0x090F), (Gid 149 / Uni 0x0917), (Gid 150 / Uni 0x0918), (Gid 152 / Uni 0x091A), (Gid 157 / Uni 0x091F), (Gid 159 / Uni 0x0921), (Gid 167 / Uni 0x092A), (Gid 172 / Uni 0x092F), (Gid 173 / Uni 0x0930), (Gid 174 / Uni 0x0932), (Gid 175 / Uni 0x0905)_
 
 **Hinting strategy**
 
