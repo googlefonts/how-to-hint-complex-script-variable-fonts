@@ -234,9 +234,9 @@ Adding Hinting for a complex Devanagari glyph.
 
 ## Adjusting global proportions
 
-![LatinAutohinter](Images/HintDevanagariThree.gif)
-
 At small screen sizes there are a limited number of pixels available to describe and render more complex glyph shapes. Adjusting the overall height of the Devanagari glyphs, can help to make the shapes clearer, particularly in the heavier weights. 
+
+![LatinAutohinter](Images/HintDevanagariThree.gif)
 
 In this example the Main Headline Devanagari height ‘cvt’ 167, stores a measurement of 623 font units, which is the measured outline distance of the square Headline Height. 
 
@@ -260,3 +260,7 @@ Open the CVT Table (`ctrl + 4`) and refer to the ‘cvt’ for Headline Height, 
 Delta(1@12;15;20) /* Raise Headline Height globally by 1 pixel */
  
 **Note:** In Variable fonts a global Delta command can only be used, if the cvt does not vary across the Variation Space. For example, a Bolder weight variation may have a larger measured outline height. This height is edited in the ‘cvar’ _(cvt variation table)_ to reflect this difference. Because of the difference in height, the bolder weight cvt, can round differently and the ‘Delta’ to change the height for the Bold may not be required.
+
+## Hinting components
+
+![LatinAutohinter](Images/HintDevanagariFour.gif)
