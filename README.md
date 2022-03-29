@@ -10,9 +10,12 @@ by [Michael Duggan](https://twitter.com/mickduggan), in collaboration with Kalap
 
 When thinking about adding hinting to any Variable font, it is a good idea to ask a few questions before beginning. How does hinting work in modern environments? What value can hinting add? Is hinting suitable for my font? The first two questions are answered in the longer VTT Variable font Hinting document, referenced above, which gives an overview of the current rendering technologies and the main benefits of modern hinting, with a focus on Variable Font Hinting. The third question can be answered by a series of tests and proofing in VTT. 
 
-As an example of Hinting complex script Variable fonts, we will be looking at the workflow for autohinting and then fine tuning the hinting code, for key representative glyphs in the Noto Devanagari Serif Variable font. The workflow and concepts discussed for the Devanagari font, can be used for other complex script Variable fonts. 
+**Is hinting suitable for my font?**
+Once you know more about what hinting is capable of, you can then ask a few questions about the font itself. Is the font intended for reading on-screen at smaller sizes or is it primarily a Display font, intended for use at larger sizes? If the latter, is hinting really needed? What benefits can I expect by adding hinting? How complex are the outline shapes? Many complex scripts fonts can benefit from hinting particularly at smaller sizes. However, for some scripts, such as Chinese, Japanese and Korean for example, the complexity of the outlines makes it impossible to apply hints that will benefit smaller sizes. Once there are enought pixels at larger sizes, hinting can help to sharpen common horizontal strokes and reduce blur. Every font should be evaluated to begin with to determine the most appropriate hinting stragety. 
 
-**Notes on running the VTT Autohinter for complex script Variable Fonts**
+We will look at these questions as we progress through this document, and will also look at the different approaches to hinting individual glyphs, and some of the limitations of Hinting for Variable fonts.
+
+## VTT Autohinting for complex script Variable Fonts**
 
 Before beginning any new Hinting project, it is also important to understand the options and requirements for running the VTT Autohinter for complex script Variable fonts. The Visual TrueType tool has the following options for Autohinting.
 
@@ -24,14 +27,9 @@ If your font contains a Latin and a complex script glyph set, the Latin portion 
 
 **(3) Control program only:** This option is similar to number 1 above, and has the same requirements for the inclusion of Latin glyph set. Using the control program only Autohinting option, is used when the intent is to add hinting to the font from scratch, via the graphical hinting interface or by writing the High Level VTT Talk by hand. The Control Program option will generate, a simple CVT Table, Font Program and will generate glyph program code for composite glyphs. Hinting code for the unique glyphs in the font will not be added. 
 
-**Is hinting suitable for my font?**
-Once you know more about what hinting is capable of, you can then ask a few questions about the font itself. Is the font intended for reading on-screen at smaller sizes or is it primarily a Display font, intended for use at larger sizes? If the latter, is hinting really needed? What benefits can I expect by adding hinting? How complex are the outline shapes? Many complex scripts fonts can benefit from hinting particularly at smaller sizes. However, for some scripts, such as Chinese, Japanese and Korean for example, the complexity of the outlines makes it impossible to apply hints that will benefit smaller sizes. Once there are enought pixels at larger sizes, hinting can help to sharpen common horizontal strokes and reduce blur. Every font should be evaluated to begin with to determine the most appropriate hinting stragety. 
-
-We will look at these questions as we progress through this document, and will also look at the different approaches to hinting individual glyphs, and some of the limitations of Hinting for Variable fonts.
-
 ## Case Study: Hinting Noto Devanagari Serif Variable font
 
-For the remainer of this document we will look at adding hinting to the Noto Serif Devanagari Variable font. Noto is a global font collection for writing in all modern and ancient languages. Noto Serif Devanagari is a modulated (“serif”) design for setting texts in the Indic Devanagari script. The Variable font supports multiple weights and widths. All of the processes and workflow can be followed and adapted for other complex script Variable fonts. A good way to begin, to evaluate the overall effects of hinting, is to run the VTT Autohinter, and review the output.
+As an example of Hinting complex script Variable fonts, we will be looking at the workflow for autohinting and then fine tuning the hinting code, for key representative glyphs in the Noto Devanagari Serif Variable font. The workflow and concepts discussed for the Devanagari font, can be used and adapted for other complex script Variable fonts. Noto is a global font collection for writing in all modern and ancient languages. Noto Serif Devanagari is a modulated (“serif”) design for setting texts in the Indic Devanagari script. The Variable font supports multiple weights and widths. All of the processes and workflow can be followed and adapted for other complex script Variable fonts. A good way to begin, to evaluate the overall effects of hinting, is to run the VTT Autohinter, and review the output.
 
 **Determining benefits of Hinting by running the Autohinter**
 
@@ -53,7 +51,7 @@ Following on from this basic idea, we can now see how this hinting effect, impro
 
 <img width="100%" height="100%" src="Images/WeightBlurSharp.png">
 
-**Improvements across Variation space** One set of of hinting code is applied to all weight variations in the Variable font, resulting in consistent sharpening of main Horizontal stokes for all weights. 
+**Improvements across Variation space** One set of of hinting code is applied to all weight and width variations in the Variable font, resulting in consistent sharpening of main Horizontal stokes for all weights. 
 
 <img width="100%" height="100%" src="Images/Nohinthintcomparison.png">
 
