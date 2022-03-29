@@ -11,11 +11,11 @@ by [Michael Duggan](https://twitter.com/mickduggan), in collaboration with Kalap
 When thinking about adding hinting to any Variable font, it is a good idea to ask a few questions before beginning. How does hinting work in modern environments? What value can hinting add? Is hinting suitable for my font? The first two questions are answered in the longer VTT Variable font Hinting document, referenced above, which gives an overview of the current rendering technologies and the main benefits of modern hinting, with a focus on Variable Font Hinting. The third question can be answered by a series of tests and proofing in VTT. 
 
 **Is hinting suitable for my font?**
-Once you know more about what hinting is capable of, you can then ask a few questions about the font itself. Is the font intended for reading on-screen at smaller sizes or is it primarily a Display font, intended for use at larger sizes? If the latter, is hinting really needed? What benefits can I expect by adding hinting? How complex are the outline shapes? Many complex scripts fonts can benefit from hinting particularly at smaller sizes. However, for some scripts, such as Chinese, Japanese and Korean for example, the complexity of the outlines makes it impossible to apply hints that will benefit smaller sizes. Once there are enought pixels at larger sizes, hinting can help to sharpen common horizontal strokes and reduce blur. Every font should be evaluated to begin with to determine the most appropriate hinting stragety. 
+Once you know more about what hinting is capable of, you can then ask a few questions about the font itself. Is the font intended for reading on-screen at smaller sizes or is it primarily a Display font, intended for use at larger sizes? If the latter, is hinting really needed? What benefits can I expect by adding hinting? How complex are the outline shapes? Many complex scripts fonts can benefit from hinting particularly at smaller sizes. However, for some scripts, such as Chinese, Japanese and Korean for example, the complexity of the outlines makes it impossible to apply hints that will benefit smaller sizes. Once there are enough pixels at larger sizes, hinting can help to sharpen common horizontal strokes and reduce blur. Every font should be evaluated to begin with to determine the most appropriate hinting strategy. 
 
 We will look at these questions as we progress through this document, and will also look at the different approaches to hinting individual glyphs, and some of the limitations of Hinting for Variable fonts.
 
-## VTT Autohinting for complex script Variable Fonts**
+## VTT Autohinting for complex script Variable Fonts
 
 Before beginning any new Hinting project, it is also important to understand the options and requirements for running the VTT Autohinter for complex script Variable fonts. The Visual TrueType tool has the following options for Autohinting.
 
@@ -33,14 +33,14 @@ As an example of Hinting complex script Variable fonts, we will be looking at th
 
 **Determining benefits of Hinting by running the Autohinter**
 
-Sharpenening of horizontal strokes at smaller screen sizes on lower resolution screens is one of the main effects of modern hinting. This sharpening significantly reduces blur along key horizontal strokes, producing much clearer text at smaller sizes on-screen. 
+Sharpening of horizontal strokes at smaller screen sizes on lower resolution screens is one of the main effects of modern hinting. This sharpening significantly reduces blur along key horizontal strokes, producing much clearer text at smaller sizes on-screen. 
 
 Running the VTT Autohinter and quickly reviewing the results will give you a good impression of the big picture of how hinting will help to render the font at small screen sizes particularly in relation to the key horizontals in the Devanagari font design. By evaluating the initial results produced by the Autohinter, you can determine the benefits of hinting and then build on refining the hinting code. 
 
 <img width="100%" height="100%" src="Images/BlurvSharp.png">
 
 **Left** Horizonal stroke un-hinted. After the un-hinted outline is scaled and rendered at a particular size, the result is very often a blurred line.
-**Right** Horizonal stroke hinted. The Autohinter uses a stragety to move the outline to a high contrast grid boundary.
+**Right** Horizonal stroke hinted. The Autohinter uses a strategy to move the outline to a high contrast grid boundary.
 
 Following on from this basic idea, we can now see how this hinting effect, improves the rendering overall for many of the main Devanagari glyphs.
 
@@ -51,13 +51,13 @@ Following on from this basic idea, we can now see how this hinting effect, impro
 
 <img width="100%" height="100%" src="Images/WeightBlurSharp.png">
 
-**Improvements across Variation space** One set of of hinting code is applied to all weight and width variations in the Variable font, resulting in consistent sharpening of main Horizontal stokes for all weights. 
+**Improvements across Variation space** One set of hinting code is applied to all weight and width variations in the Variable font, resulting in consistent sharpening of main Horizontal stokes for all weights. 
 
 <img width="100%" height="100%" src="Images/Nohinthintcomparison.png">
 
 **Devanagari text sample** 
 
-Text Sample comparing hinted to unhinted / typeset at Axis-praxis.org / Universal Declaration of Human Rights / NotoSerifDevanagariVF_Demo.ttf, 15px, 11point@96dpi, Google Chrome (Version 99.0.4844.51) / Windows 11 / DirectWrite Rendering / Consistent sharpening and alignment along Headline of all Devanagari glyphs. Key details are kept clear on-screen at smaller text sizes
+Text Sample comparing hinted to un-hinted / Typeset at Axis-praxis.org / Universal Declaration of Human Rights / NotoSerifDevanagariVF_Demo.ttf, 15px, 11point@96dpi, Google Chrome (Version 99.0.4844.51) / Windows 11 / DirectWrite Rendering / Consistent sharpening and alignment along Headline of all Devanagari glyphs. Key details are kept clear on-screen at smaller text sizes
 
 
 ## Alignments and measurements
@@ -70,13 +70,13 @@ Referencing ‘cvt’ values from hinting instructions in a set of glyphs that s
 
 This is also useful for making global adjustments to heights, and proportions for a range of glyphs, by adjusting just one cvt. Global adjustments to proportions in complex script fonts, can help provide more space for Bolder weights, for example, helping to make the rendering much clearer on-screen.
  
-## Adding new CVT's for Devanagari 
+## Adding new CVT’s for Devanagari 
 
-Now that we have taken some measurements from the font outlines, we can build some new cvt’s for use in hinting the Devanagari. The illustration above shows four key measurements taken from representatinve glyphs. We can add futher cvt’s when required, for any other aligment zones, that can be determined in the font.
+Now that we have taken some measurements from the font outlines, we can build some new cvt’s for use in hinting the Devanagari. The illustration above shows four key measurements taken from representative glyphs. We can add further cvt’s when required, for any other alignment zones, that can be determined in the font.
 
 To add the new cvt’s, open the Control program. At the end of the control program add the following cvt entries, starting with the next available ID number, in this case cvt number 167. _(Because this font contains a Latin Subset, the Autohinter has already generated cvt’s for the Latin font)_
 
-Add four new cvt’s, for ‘Main Headline Height’, ‘Headline overshoot’, ‘Baseline’, and ‘Baseline undershoot’ using the measurements taken from the outlines. Compile and Save the Control Program. These new cvt’s are now available for use, and can be referenced in the VTTTalk Hinting code of individual glyphs.
+Add four new cvt’s, for ‘Main Headline Height’, ‘Headline overshoot’, ‘Baseline’, and ‘Baseline undershoot’ using the measurements taken from the outlines. Compile and Save the Control Program. These new cvt’s are now available for use, and can be referenced in the VTTtalk Hinting code of individual glyphs.
 
 /***** Devanagari Height cvt’s *****/
  
@@ -102,7 +102,7 @@ ASM("CALL[], 169, 89")
 
 ## Hinting Devanagari letter GA (Unicode+0917)
 
-Let’s begin by looking at how to add hinting to Devanagari letter GA. In this example we will delete the existing Autohinting code and add the hinting via the graphical user interface. The main height controls and cvt’s added to this glyph will set the direction for adding hinting and maintaining consistent height control for other Devanagari glyphs, that share the same headline and baseline heights. Many of the glyphs in the font share a common alignment. Please refer to the [demo font](https://github.com/googlefonts/how-to-hint-non-latin-variable-fonts/tree/main/VTTSourcesDemoFont) to review and study the hinting approach. The following glyphs have have been fine tuned, and cvt’s added. 
+Let’s begin by looking at how to add hinting to Devanagari letter GA. In this example we will delete the existing Autohinting code and add the hinting via the graphical user interface. The main height controls and cvt’s added to this glyph will set the direction for adding hinting and maintaining consistent height control for other Devanagari glyphs, that share the same headline and baseline heights. Many of the glyphs in the font share a common alignment. Please refer to the [demo font](https://github.com/googlefonts/how-to-hint-non-latin-variable-fonts/tree/main/VTTSourcesDemoFont) to review and study the hinting approach. The following glyphs have have been fine-tuned, and cvt’s added. 
 
 **Hinted and fine tuned glyphs:** _(Gid 98 / Uni 0x0905), (Gid 102 / Uni 0x0909), (Gid 108 / Uni 0x090F), (Gid 149 / Uni 0x0917), (Gid 150 / Uni 0x0918), (Gid 152 / Uni 0x091A), (Gid 157 / Uni 0x091F), (Gid 159 / Uni 0x0921), (Gid 167 / Uni 0x092A), (Gid 172 / Uni 0x092F), (Gid 173 / Uni 0x0930), (Gid 174 / Uni 0x0932), (Gid 175 / Uni 0x0905)_
 
@@ -134,7 +134,7 @@ With the Yshift Tool still selected, drag from point 26 to point 14 and from poi
  Shifts point 14, to a new position, relative to point 26’s new position maintaining the same relative distance between the point 26 and point 14, and point 23, as is in the original high resolution design of the outline. Point 14 and point 23 are now positioned correctly across all variations in the design space.
 
 **A note on Hinting overlapping outlines**
- *Variable fonts are often designed with outlines that overlap. To ensure the hinted font renders correctly it is important to add hinting to points on the outline that overlap, so that these points maintain their correct position in the hinted outline. In this case, the shift command from point 26 to point 14 and 23, will ensure that point 14 and 23, maintain the correct position in the hinted outline, in the y-axis, between points 28 and 26. **Note** An alternative method to contol the correct positions for these overlapping points, is to interpolate points 14, 15, 23, 24, between points 28, and 26 in the y-axis using YInterpolate(28,14,15,23,24,26). The overall effect is the same*
+ *Variable fonts are often designed with outlines that overlap. To ensure the hinted font renders correctly it is important to add hinting to points on the outline that overlap, so that these points maintain their correct position in the hinted outline. In this case, the shift command from point 26 to point 14 and 23, will ensure that point 14 and 23, maintain the correct position in the hinted outline, in the y-axis, between points 28 and 26. **Note** An alternative method to control the correct positions for these overlapping points, is to interpolate points 14, 15, 23, 24, between points 28, and 26 in the y-axis using YInterpolate(28,14,15,23,24,26). The overall effect is the same*
 
 **Step 2: Devanagari Baseline Height Control** 
 
@@ -148,7 +148,7 @@ Moves point 21 to the nearest gridline. The appropriate cvt for the Devanagari B
 
 **YShift(21,22)** Shifts point 22, to a new position, relative to point 21’s new position on the grid, maintaining the same relative distance between the point 21 and point 22 as is in the original high resolution design of the outline. 
 
-**Step 3: Control position of mid section of glyph in Y-axis** 
+**Step 3: Control position of mid-section of glyph in Y-axis** 
 
 Now that the Baseline and Headline Height have been established the middle section now needs to be interpolated to find its correct position. 
 
@@ -162,7 +162,7 @@ The middle section is now positioned correctly, between the base line and Headli
 
 Moves point 0, to full pixel grid, positioned relative to point 28 and point 21, which now has a new grid-fit position. This ensures high contrast on the bottom of the middle section of the GA glyph helping to minimise blur.
 
-**Step 4: Control weight of mid section** 
+**Step 4: Control weight of mid-section** 
 Choose the YShift tool. Position the _‘blue circle’_, directly over point 0 and drag to point 7. The following code is generated in the VTT Talk Window.
 
 **YShift(0,7)**
@@ -196,7 +196,7 @@ YShift(14,23)
 
 Smooth()
 
-_The hinting for GA is now complete. Additional glyphs that share the same alignment can  now be hinted using the same overall stragety and referencing the same cvt values.Glyphs can be proofed in the main window, using the text string to see shape and spacing, in the size ramp to see the hinted results at a range of sizes, and in the Variation Window, to proof for all variations in the font._
+_The hinting for GA is now complete. Additional glyphs that share the same alignment can  now be hinted using the same overall strategy and referencing the same cvt values. Glyphs can be proofed in the main window, using the text string to see shape and spacing, in the size ramp to see the hinted results at a range of sizes, and in the Variation Window, to proof for all variations in the font._
 
 **Pro Tips** 
 
@@ -216,7 +216,7 @@ The VTT Autohinter generates cvt’s for the Other group. When hinting a glyph f
 
 `Edit > Change char group` or press ctrl + U, until ‘Anygroup’ is listed, then choose File and save.  
 
-When the Character Group info is set to ‘Anygroup’, and saved, adding the YAnchor Hinting commands for the Devanagari heights, via the graphical hinting tools, will generate a Yanchor with no cvt associated with it. You can then manually add references to the correct Devanagari cvt’s, compile and save. The alternative to this approach is to let VTT choose a cvt. You must then remember to change that cvt reference to use the correct custom script specific cvt you have creeated in the cvt table, such as the ones we created above for the Devanagari font.
+When the Character Group info is set to ‘Anygroup’, and saved, adding the YAnchor Hinting commands for the Devanagari heights, via the graphical hinting tools, will generate a Yanchor with no cvt associated with it. You can then manually add references to the correct Devanagari cvt’s, compile and save. The alternative to this approach is to let VTT choose a cvt. You must then remember to change that cvt reference to use the correct custom script specific cvt you have created in the cvt table, such as the ones we created above for the Devanagari font.
 
 
 ## Hinting Devanagari letter DdA (Unicode+0921)
