@@ -261,6 +261,24 @@ Delta(1@12;15;20) /* Raise Headline Height globally by 1 pixel */
  
 **Note:** In Variable fonts a global Delta command can only be used, if the cvt does not vary across the Variation Space. For example, a Bolder weight variation may have a larger measured outline height. This height is edited in the ‘cvar’ _(cvt variation table)_ to reflect this difference. Because of the difference in height, the bolder weight cvt, can round differently and the ‘Delta’ to change the height for the Bold may not be required.
 
-## Hinting components
+## Hinting components and accents
+
+**Hinting strategy for components and accents**
+
+1. Ensure hinted glyph is at least two pixels in height at all sizes for all variations, making it render clearly at lower sizes on-screen.
+2. Hint the bottom of the glyph to align to the grid, using a cvt height as a reference
+3. Hint from bottom to top of glyph, to ensure top or y-max is aligned to a sharp grid boundary.
+4. Control weight of y-straight or y-round accent stroke
+4. Maintain a minimum distance white space, in accents that need to kept clear. 
+
+_The Autohinter has no special strategy for hinting accented glyphs. By locking the top and bottom of the accent to the grid, the autohinter code can cause accents to collapse to one pixel in height, which is too small to describe a typical accent or component._
+
+_To ensure the best readable solution, accents that need it, should be hinted to be a minimum of two pixels in height for all sizes_
 
 ![LatinAutohinter](Images/HintDevanagariFour.gif)
+
+**Note:** In the example animation above, the y-min of the component glyphs, Uni0947 & Uni0948, reference a cvt of 171, which stores the measured outline y-min. The outline measurement for these components is lower than the main headline height. This is done to maintain an overlap when combined above another base glyph.
+
+Using inheritence, Cvt 171 is then forced to be equal to the main headline height cvt 167. This will ensure that the components, when they are used in composite glyphs, are displayed at the exact same hinted height as the main straight Headline height, for all variations. At higher sizes, when there are enough pixels, the accent can revert to using its measured height.
+
+A new cvt can be created for any group of accents or components, that share the same y-direction alignment. This will ensure that when accents are referenced in composite glyphs a consistent display and alignment will be maintained. 
