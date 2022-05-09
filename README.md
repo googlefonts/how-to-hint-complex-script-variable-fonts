@@ -116,13 +116,23 @@ Let’s begin by looking at how to add hinting to Devanagari letter GA. In this 
 
 **Hinting the GA (Unicode 0917)**
 
+Before beginning hinting, while in the main window, set the correct ‘character group’, for the current glyph. The ‘character group’ information for each character is listed in the text string at the top of the Main Window, and appears like this
+
+Gid 149, char 0x917, ‘uni0917’, **INDIC** _(Character group information)_
+
+The ‘character group’ tells VTT which group of values to use from the Control Value Table. As you add the hinting, VTT will automatically pick the correct cvt’s for heights that have been defined in the cvt table. 
+
+**To change the character group for the current glyph**
+
+From the edit menu, choose ‘Change Char group’. A shortcut for this is to press Ctrl+U. Repeat `ctrl + u`, until ‘INDIC’ is listed as the ‘character group’ information in the text string at the top of the main Window.
+
 **Step 1: Devanagari Headline Height Control** 
 
-Choose the Yshift Tool from the Toolbar. Position the ‘blue circle’, directly over point 28, click, and drag to point 26 and release. 
+Choose the YShift Tool from the Toolbar. Position the ‘blue circle’, directly over point 28, click, and drag to point 26 and release. 
 
 The following code is generated in the VTT Talk Window.
 
-**YAnchor (28)** Moves point 28 to the nearest gridline. The appropriate cvt for the Devanagari Headline height will be added manually after the visual hinting is applied for this glyph.
+**YAnchor (28, 167)** Moves point 28 to the control value listed in the ‘Control Program’, that corresponds to the Devanagari, Main Flat Headline Height, (cvt #167) and rounds this point to a grid line. (View > Control Program:  (167: 623 /* Main Flat Headline Height */) 
 
 **YShift(28,26)** Shifts point 26, to a new position, relative to point 28’s new position on the grid, maintaining the same relative distance between the point 28 and point 26 as is in the original high resolution design of the outline. The shift command does not reference a cvt value and does not move the hinted point 26 to a full pixel grid line. Shift also does not default to a one pixel minimum used by the Link command. Using the Shift command will maintain a balanced visual weight, of this important Devanagari horizontal feature , across all variations.
 
@@ -131,22 +141,22 @@ With the Yshift Tool still selected, drag from point 26 to point 14 and from poi
 **YShift(26,14)**
 **YShift(14,23)**
 
- Shifts point 14, to a new position, relative to point 26’s new position maintaining the same relative distance between the point 26 and point 14, and point 23, as is in the original high resolution design of the outline. Point 14 and point 23 are now positioned correctly across all variations in the design space.
+ Shifts point 14, to a new position, relative to point 26’s new position maintaining the same relative distance between point 26 and point 14, and point 23, as is in the original high resolution design of the outline. Point 14 and point 23 are now positioned correctly across all variations in the design space.
 
 **A note on Hinting overlapping outlines**
  *Variable fonts are often designed with outlines that overlap. To ensure the hinted font renders correctly it is important to add hinting to points on the outline that overlap, so that these points maintain their correct position in the hinted outline. In this case, the shift command from point 26 to point 14 and 23, will ensure that point 14 and 23, maintain the correct position in the hinted outline, in the y-axis, between points 28 and 26. **Note** An alternative method to control the correct positions for these overlapping points, is to interpolate points 14, 15, 23, 24, between points 28, and 26 in the y-axis using YInterpolate(28,14,15,23,24,26). The overall effect is the same*
 
 **Step 2: Devanagari Baseline Height Control** 
 
-With the Yshift Tool still selected from the toolbar, position the ‘blue circle’, directly over point 21, click, and drag to point 22 and release. 
+With the Yshift Tool still selected from the toolbar, position the ‘blue circle’, directly over point 21, and right click. With the right mouse button held down, drag to the right to select ‘round to grid’ then release. 
 
 The following code is generated in the VTT Talk Window.
 
-**Yanchor(21)**
+**Yanchor(21, 170)**
 
-Moves point 21 to the nearest gridline. The appropriate cvt for the Devanagari Baseline undershoot height will be added manually after the visual hinting is applied for this glyph.
+Moves point 21 to the control value listed in the ‘Control Program’, that corresponds to the Devanagari, Baseline undershoot Height, (cvt #170) and rounds this point to a grid line. (View > Control Program:  (170: -5 /* Baseline undershoot */)
 
-**YShift(21,22)** Shifts point 22, to a new position, relative to point 21’s new position on the grid, maintaining the same relative distance between the point 21 and point 22 as is in the original high resolution design of the outline. 
+**YShift(21,22)** With the Yshift Tool still selected from the toolbar, position the ‘blue circle’, directly over point 21, and drag to point 22. Shifts point 22, to a new position, relative to point 21’s new position on the grid, maintaining the same relative distance between the point 21 and point 22 as is in the original high resolution design of the outline. 
 
 **Step 3: Control position of mid-section of glyph in Y-axis** 
 
@@ -168,13 +178,13 @@ Choose the YShift tool. Position the _‘blue circle’_, directly over point 0 
 **YShift(0,7)**
 Shifts point 7, to a new position, relative to point 0’s new position on the grid, maintaining the same relative distance between the point 0 and point 7 as is in the original high resolution design of the outline. The shift command does not reference a cvt value and does not move the hinted point 7 to a full pixel grid line. Shift also does not default to a one pixel minimum used by the Link command. Using the Shift command will maintain a balanced visual weight, of horizontal features in particular, across all variations. 
 
-**Step 5: Adding the Res command and Devanagari reference cvt’s** 
+**Step 5: Adding the Res command** 
 
-_The Res addition to the command ResAnchor, for example, stands for Rendering Environment Specific, and ensures that the appropriate rounding happens, for various rendering environments. This saves adding additional Hinting commands if Hinting is required to work in a variety of rendering environments. _The Res command calls a Function, that is designed to also allow for more subtle rendering of features such as undershoots and overshoots_
+_The Res addition to the command ‘Anchor’, for example, stands for Rendering Environment Specific, and ensures that the appropriate rounding happens, for various rendering environments. This saves adding additional hinting commands if hinting is required to work in a variety of rendering environments. _The Res command calls a Function, that is designed to also allow for more subtle rendering of features such as undershoots and overshoots_
 
-Switch to the VTTtalk window** (`ctrl + 5`). Type Res before the YAnchor commands and add the reference to the correct height cvt’s at the end of the YAnchor command. Compile VTT Talk, (`ctrl + r`) and save (`ctrl + s`). 
+Switch to the VTTtalk window** (`ctrl + 5`). Type Res before the YAnchor commands, Compile VTT Talk, (`ctrl + r`) and save (`ctrl + s`)
 
-While in the VTTtalk Window, add the reference to the new Devanagari cvt’s that have been defined in the Control Value table. The final VTTtalk code, for the GA glyph, in the VTTtalk window will appear like this. The Res commands and cvt’s are highlighted here. After appending the Res commands to the YAnchors and adding the cvt’s, compile the VTTtalk window and save. 
+The final VTTtalk code, for the GA glyph, in the VTTtalk window will appear like this. The Res commands and cvt’s are highlighted here. After appending the Res commands to the YAnchors and adding the cvt’s, compile the VTTtalk window and save. 
 
 /* Y direction */
 
@@ -204,7 +214,7 @@ _The hinting for GA is now complete. Additional glyphs that share the same align
 
 When adding new hinting code from scratch, or when editing the output from the Autohinter, choose the option under `Display > Options > VTT Attributes` > **Show CVT numbers.** 
 
-When new cvt’s are added and the code is compiled in the VTTtalk code, _(as shown in the animation above)_ the cvt numbers will be shown graphically in the main window. As you progress through hinting the glyph set, showing cvt numbers allows for easier visual proofing of the hinted glyphs in the Main Window, for example to quickly determine whether the correct cvt’s are used for heights. 
+When new cvt’s are added, the cvt numbers will be shown graphically in the main window. As you progress through hinting the glyph set, showing cvt numbers allows for easier visual proofing of the hinted glyphs in the Main Window, for example to quickly determine whether the correct cvt’s are used for heights. 
 
 **Notes on Character Group information and adding new cvt’s**
 
@@ -255,7 +265,7 @@ To change this height globally, a ‘Delta’ command is used to raise the Headl
 Open the CVT Table (`ctrl + 4`) and refer to the ‘cvt’ for Headline Height, ‘cvt’ number 167. Directly after the ‘cvt’ type the following, Delta(1@12;15;20) and compile, ctrl ( r ) and save.
  
 **CVT Entry for Square Devanagari Headline Height**
-167:  1462 /* Square Headline Height */
+167:  623 /* Square Headline Height */
  
 Delta(1@12;15;20) /* Raise Headline Height globally by 1 pixel */
  
