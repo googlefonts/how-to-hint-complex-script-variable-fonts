@@ -29,9 +29,18 @@ If your font contains a Latin and a complex script glyph set, the Latin portion 
 
 ## Case Study: Hinting Noto Devanagari Serif Variable font
 
-As an example of Hinting complex script Variable fonts, we will be looking at the workflow for autohinting and then fine tuning the hinting code, for key representative glyphs in the Noto Devanagari Serif Variable font. The workflow and concepts discussed for the Devanagari font, can be used and adapted for other complex script Variable fonts. Noto is a global font collection for writing in all modern and ancient languages. Noto Serif Devanagari is a modulated (“serif”) design for setting texts in the Indic Devanagari script. The Variable font supports multiple weights and widths. All of the processes and workflow can be followed and adapted for other complex script Variable fonts. A good way to begin, to evaluate the overall effects of hinting, is to run the VTT Autohinter, and review the output.
+As an example of Hinting complex script Variable fonts, we will be looking at the workflow for autohinting and then fine tuning the hinting code, for key representative glyphs in the Noto Devanagari Serif Variable font. The workflow and concepts discussed for the Devanagari font, can be used and adapted for other complex script Variable fonts. Noto is a global font collection for writing in all modern and ancient languages. Noto Serif Devanagari is a modulated (“serif”) design for setting texts in the Indic Devanagari script. The Variable font supports multiple weights and widths. All of the processes and workflow can be followed and adapted for other complex script Variable fonts. 
 
 **Determining benefits of Hinting by running the Autohinter**
+
+A good way to begin, to evaluate the overall effects of hinting, is to run the VTT Autohinter, and review the output.
+
+Follow the workflow steps 1 and 2, as described in [How to Hint Variable fonts](https://github.com/googlefonts/how-to-hint-variable-fonts)
+
+**Step 1:** [Autohinting a Variable Font](https://github.com/googlefonts/how-to-hint-variable-fonts#vtt-variable-font-workflow-process)
+
+**Step 2:** [XML, Export and Import Hinting code](https://github.com/googlefonts/how-to-hint-variable-fonts#xml-export-and-import-hinting-code)
+
 
 Sharpening of horizontal strokes at smaller screen sizes on lower resolution screens is one of the main effects of modern hinting. This sharpening significantly reduces blur along key horizontal strokes, producing much clearer text at smaller sizes on-screen. 
 
@@ -60,7 +69,13 @@ Following on from this basic idea, we can now see how this hinting effect, impro
 Text Sample comparing hinted to un-hinted / Typeset at Axis-praxis.org / Universal Declaration of Human Rights / NotoSerifDevanagariVF_Demo.ttf, 15px, 11point@96dpi, Google Chrome (Version 99.0.4844.51) / Windows 11 / DirectWrite Rendering / Consistent sharpening and alignment along Headline of all Devanagari glyphs. Key details are kept clear on-screen at smaller text sizes
 
 
-## Alignments and measurements
+## Determining key height Alignments and measurements
+
+Before beginning any edits or fine tuning of the hinting of the font, cvt’s for key heights should be created. If you are familiar with the script or the alignment heights are obvious, you can add new cvt’s for key heights, and overshoot features as described below for the Devanagari Variable font. 
+
+If you are not familiar with the script, it is best to work with the a script expert or by referencing trusted documentation online, to firstly determine the main aligment zones or key heights for the font. Once these have been established, the new cvt’s can be added. 
+
+You can add as many new cvt’s as needed for height or features. Typically a new cvt is added for a height for example, that is shared by many glyph in the font. referencing these new cvt’s in the hinting, will ensure a consistent alignment of the hinted glyphs, and will also allow for global adjustments to heights to improve readability at smaller sizes. 
 
 <img width="100%" height="100%" src="Images/HeightsDevanagari.png">
 
@@ -80,13 +95,21 @@ Add four new cvt’s, for ‘Main Headline Height’, ‘Headline overshoot’, 
 
 /***** Devanagari Height cvt’s *****/
  
-      167:   623 /* Main Flat Headline height */
+ INDIC 
+
+      Grey
+
+      Y
+
+      SquareHeight
+
+      167:   623 /* Main Devanagari Flat Headline height */
   
 ASM("SVTCA[Y]")
 
 ASM("CALL[], 167, 89")
  
-      169:     0 /* baseline */
+      169:     0 /* Devanagari Baseline */
 
 ASM("SVTCA[Y]")
 
@@ -94,9 +117,9 @@ ASM("CALL[], 169, 89")
 
   RoundHeight
 
-      168:    5 ~   167 @ 42 /* cap height overshoot */
+      168:    5 ~   167 @ 42 /* Round Devanagari Headline Overshoot*/
 
-      170:   -5 ~   169 @ 42 /* baseline undershoot */
+      170:   -5 ~   169 @ 42 /* Devanagari Baseline Undershoot */
 
 
 
@@ -132,7 +155,7 @@ Choose the YShift Tool from the Toolbar. Position the ‘blue circle’, directl
 
 The following code is generated in the VTT Talk Window.
 
-**YAnchor (28, 167)** Moves point 28 to the control value listed in the ‘Control Program’, that corresponds to the Devanagari, Main Flat Headline Height, (cvt #167) and rounds this point to a grid line. (View > Control Program:  (167: 623 /* Main Flat Headline Height */) 
+**YAnchor (28, 167)** Moves point 28 to the control value listed in the ‘Control Program’, that corresponds to the Devanagari, Main Flat Headline Height, (cvt #167) and rounds this point to a grid line. (View > Control Program:  (167: 623 /* Main Devanagari Flat Headline Height */) 
 
 **YShift(28,26)** Shifts point 26, to a new position, relative to point 28’s new position on the grid, maintaining the same relative distance between the point 28 and point 26 as is in the original high resolution design of the outline. The shift command does not reference a cvt value and does not move the hinted point 26 to a full pixel grid line. Shift also does not default to a one pixel minimum used by the Link command. Using the Shift command will maintain a balanced visual weight, of this important Devanagari horizontal feature , across all variations.
 
@@ -154,7 +177,7 @@ The following code is generated in the VTT Talk Window.
 
 **Yanchor(21, 170)**
 
-Moves point 21 to the control value listed in the ‘Control Program’, that corresponds to the Devanagari, Baseline undershoot Height, (cvt #170) and rounds this point to a grid line. (View > Control Program:  (170: -5 /* Baseline undershoot */)
+Moves point 21 to the control value listed in the ‘Control Program’, that corresponds to the Devanagari Baseline Undershoot Height, (cvt #170) and rounds this point to a grid line. (View > Control Program:  (170: -5 /* Devanagari Baseline Undershoot */)
 
 **YShift(21,22)** With the Yshift Tool still selected from the toolbar, position the ‘blue circle’, directly over point 21, and drag to point 22. Shifts point 22, to a new position, relative to point 21’s new position on the grid, maintaining the same relative distance between the point 21 and point 22 as is in the original high resolution design of the outline. 
 
@@ -184,15 +207,15 @@ _The Res addition to the command ‘Anchor’, for example, stands for Rendering
 
 Switch to the VTTtalk window** (`ctrl + 5`). Type Res before the YAnchor commands, Compile VTT Talk, (`ctrl + r`) and save (`ctrl + s`)
 
-The final VTTtalk code, for the GA glyph, in the VTTtalk window will appear like this. The Res commands and cvt’s are highlighted here. After appending the Res commands to the YAnchors and adding the cvt’s, compile the VTTtalk window and save. 
+The final VTTtalk code, for the GA glyph, in the VTTtalk window will appear like this. The Res commands and cvt’s are highlighted here. After appending the Res commands to the YAnchors, compile the VTTtalk window and save. 
 
 /* Y direction */
 
-**Res**YAnchor(21 **,170**)  /* baseline undershoot */
+**Res**YAnchor(21 **,170**)  /* Devanagari Baseline undershoot */
 
 YShift(21,22)
 
-**Res**YAnchor(28 **,167**) /* Main Flat Headline height */
+**Res**YAnchor(28 **,167**) /* Main Devanagari Flat Headline height */
 
 YIPAnchor(21,0,28)
 
@@ -215,19 +238,6 @@ _The hinting for GA is now complete. Additional glyphs that share the same align
 When adding new hinting code from scratch, or when editing the output from the Autohinter, choose the option under `Display > Options > VTT Attributes` > **Show CVT numbers.** 
 
 When new cvt’s are added, the cvt numbers will be shown graphically in the main window. As you progress through hinting the glyph set, showing cvt numbers allows for easier visual proofing of the hinted glyphs in the Main Window, for example to quickly determine whether the correct cvt’s are used for heights. 
-
-**Notes on Character Group information and adding new cvt’s**
-
-Each glyph in a font has Character group information associated with it. The character group tells VTT which group of values to use from the Control Value Table. When hinting complex fonts, such as Devanagari, the Character group information is usually listed as ‘Other’. _(The Character group information is listed at the top of the Main Window, after the Unicode Value for the glyph. The categories are UpperCase, LowerCase, Figure, Reserved 1,2 & 3, Anygroup, Other)._ 
-
-The VTT Autohinter generates cvt’s for the Other group. When hinting a glyph from scratch using the Visual Hinting tools, VTT uses the character group information to pick cvt’s YAnchors for example. When the character group is set to ‘Other’, VTT will look for the cvt’s defined as ‘Other’ in the cvt table, and will add these automatically. To avoid this happening, you can change the character group information for the glyph you are hinting to ‘Anygroup’.
-
-**To change the character group information of the current glyph**
-
-`Edit > Change char group` or press ctrl + U, until ‘Anygroup’ is listed, then choose File and save.  
-
-When the Character Group info is set to ‘Anygroup’, and saved, adding the YAnchor Hinting commands for the Devanagari heights, via the graphical hinting tools, will generate a Yanchor with no cvt associated with it. You can then manually add references to the correct Devanagari cvt’s, compile and save. The alternative to this approach is to let VTT choose a cvt. You must then remember to change that cvt reference to use the correct custom script specific cvt you have created in the cvt table, such as the ones we created above for the Devanagari font.
-
 
 ## Hinting Devanagari letter DdA (Unicode+0921)
 
