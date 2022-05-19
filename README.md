@@ -145,9 +145,9 @@ Before beginning hinting, while in the main window, set the correct ‘character
 
 Gid 149, char 0x917, ‘uni0917’, **INDIC** _(Character group information)_
 
-The ‘character group’ tells VTT which group of values to use from the Control Value Table. As you add the hinting, VTT will automatically pick the correct cvt’s for heights that have been defined in the cvt table. 
+The ‘character group’ tells VTT which group of values to use from the Control Value Table. As you add the hinting, VTT will automatically pick the correct cvt’s for heights that have already been newly defined for Indic in the cvt table. 
 
-**To change the character group for the current glyph**
+**To change the character group to ‘Indic’ for the current glyph**
 
 From the edit menu, choose ‘Change Char group’. A shortcut for this is to press Ctrl+U. Repeat `ctrl + u`, until ‘INDIC’ is listed as the ‘character group’ information in the text string at the top of the main Window.
 
@@ -253,10 +253,69 @@ Adding Hinting for a complex Devanagari glyph.
 
 ![LatinAutohinter](Images/HintDevanagariTwo.gif)
 
+While in the main window, choose ‘Change char group’, from the edit menu. A shortcut for this is to press `ctrl + u`. Repeat `ctrl + u`, until ‘INDIC’ is listed as the ‘character group’ information in the text string at the top of the main Window. _(Listed after the Unicode and before the ppem size)_
+
+**Control Top alignment** 
+
+Choose the YShift Tool from the Toolbar. Position the ‘blue circle’, directly over point 51, click, drag to point 49 and release. 
+
+The following code is generated in the VTT Talk Window.
+
+**YAnchor (51, 167)** Moves point 51 to the control value listed in the ‘Control Program’, that corresponds to the Devanagari Main Flat Headline Height, (cvt #167) and rounds this point to a grid line. (View > Control Program:  (167: 623 /* Main Devanagari Flat Headline Height */) 
+
+**Control top horizontal weight** 
+
+**YShift(51,49)** Shifts point 49, to a new position, relative to point 51’s new position on the grid, maintaining the same relative distance between the point 51 and point 49 as is in the original high resolution design of the outline. Using the Shift command will maintain a balanced visual weight, of this important Devanagari horizontal feature , across all variations.
+
+**Control outline overlap** 
+
+With the Yshift Tool still selected, drag from point 49 to point 26 The following code is generated.
+
+**YShift(49,26)**
+
+Shifts point 26, to a new position, relative to point 49’s new position maintaining the same relative distance between point 49 and point 26, as is in the original high resolution design of the outline. Point 26 will now be positioned correctly across all variations in the design space. **Note:** _Because point 27 is at the same y-horizontal measurement as point 26, there is no need to use a shift command to touch point 27. Point 27 will move automatically to the same y-position as point 26._
+
+
+**Control bottom alignment** 
+
+With the YShift Tool still selected from the Toolbar. Position the ‘blue circle’, directly over point 0, right click, and drag to the right to select a cvt.
+
+The following code is generated in the VTT Talk Window.
+
+**YAnchor (0, 169)** Moves point 51 to the control value listed in the ‘Control Program’, that corresponds to the Devanagari Baseline (cvt #169) and rounds this point to a grid line. (View > Control Program:  (167: 623 /* Main Devanagari Flat Headline Height */)
+
+**Disable cvt selection** 
+Right click on the Anchor symbol associated with point 0, drag to the left to disable cvt selection. The following code is generated
+
+YAnchor(0)
+
+**Note:** 
+_In this case VTT will try and choose the cvt closest to the baseline for Devanagari. The outline measurements of the high resolution outline differs across the variation space however. In the Thin weight point zero is positioned at a y-measurement of +13 font units, while in the Black weight point zero is positioned at a y-measurement of -3 font units, below the baseline. Moving point zero to reference a cvt in this case will work for smaller screen sizes, where there are fewer pixels, but will position point zero incorrectly at higher sizes, causing the bottom round in the Thin weight to round to low, and too high in the Heavy weight. In this case its best to use a YAnchor command, without a cvt reference, to round this feature to the grid, allowing the bottom of the y-round to round to the oulines naturally scaled outline position. This method will work for both smaller sizes, where the rounding will naturally round to the baseline, and at larger sizes, when there are more pixels available, to round to the correct position across the variation weight range._
+
+**Control bottom round weight** 
+
+With the YShift Tool selected from the Toolbar, drag from point 0 to point 7 and release. 
+
+**YShift(0,7)** Shifts point 7, to a new position, relative to point 0’s new position on the grid, maintaining the same relative distance between the point 0 and point 7 as is in the original high resolution design of the outline.
+
+**Control position of middle curves**
+
+Choose the YInterpolate tool. Position the ‘blue circle’, directly over point 51, drag to point 0. You will see a ‘line’ appear, which takes the form of a draggable ‘elastic band’. No code is generated yet until a point or points are chosen to interpolate. Click anywhere on the interpolation line, and drag to the points on the middle curves you wish to interpolate, in this case points 13, 39, 22 and 30 and release. the following code is generated
+
+**YInterpolate(0,13,39,30,22,51)** 
+
+This will position the middle curves corectly across the weight variations, relative to the grid fitted positions of the y-min and y-max of the glyphs. When hinting more complex, dense glyphs in Variable fonts, it is often better to use an interpolation for positioning middle elements, rather than trying to place these elements onto the grid. Grid-fitting the curves in this case may work for the light weights, but may cause clashing or black spots, at smaller sizes in the bolder weights. 
+
+**Add Res command**
+
+Switch to the VTTtalk window** (ctrl + 5). Type Res before the YAnchor command that has a cvt associated with it, here it is YAnchor(51,167). Compile VTT Talk, (ctrl + r) and save (ctrl + s).
+
+The hinting for the Devanagari letter DdA (Unicode+0921), is now complete and ready for proofing. 
+
 
 ## Adjusting global proportions
 
-At small screen sizes there are a limited number of pixels available to describe and render more complex glyph shapes. Adjusting the overall height of the Devanagari glyphs, can help to make the shapes clearer, particularly in the heavier weights. 
+At small screen sizes there are a limited number of pixels available to describe and render more complex glyph shapes. Adjusting the overall height of the Devanagari glyphs, can help to make the glyphs, that are more complex and dense, clearer and more open, particularly in the heavier weights. 
 
 ![LatinAutohinter](Images/HintDevanagariThree.gif)
 
