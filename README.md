@@ -10,7 +10,7 @@ by [Michael Duggan](https://twitter.com/mickduggan), in collaboration with Kalap
 
 When thinking about adding hinting to any Variable font, it is a good idea to ask a few questions before beginning. How does hinting work in modern environments? What value can hinting add? Is hinting suitable for my font? The first two questions are answered in the longer VTT Variable font Hinting document, referenced above, which gives an overview of the current rendering technologies and the main benefits of modern hinting, with a focus on Variable Font Hinting. The third question can be answered by a series of tests and proofing in VTT. 
 
-**Is hinting suitable for my font?**
+**Is hinting suitable for the font?**
 Once you know more about what hinting is capable of, you can then ask a few questions about the font itself. Is the font intended for reading on-screen at smaller sizes or is it primarily a Display font, intended for use at larger sizes? If the latter, is hinting really needed? What benefits can I expect by adding hinting? How complex are the outline shapes? Many complex scripts fonts can benefit from hinting particularly at smaller sizes. However, for some scripts, such as Chinese, Japanese and Korean for example, the complexity of the outlines makes it impossible to apply hints that will benefit smaller sizes. Once there are enough pixels at larger sizes, hinting can help to sharpen common horizontal strokes and reduce blur. Every font should be evaluated to begin with, to determine the most appropriate hinting strategy. 
 
 We will look at these questions as we progress through this document, and will also look at the different approaches to hinting individual glyphs, and some of the current limitations of Hinting for Variable fonts.
@@ -87,19 +87,36 @@ Referencing ‘cvt’ values from hinting instructions in a set of glyphs that s
 
 This is also useful when making global adjustments to heights, and proportions for a range of glyphs, by adjusting just one cvt. Global adjustments to proportions in complex script fonts, can help provide more space for heavier weights, for example, helping to make the rendering much clearer on-screen.
  
-## Adding new CVT’s for Devanagari 
+## Adding Character Group information and CVT’s for Devanagari 
+
+**Character Group Information**
+
+![LatinAutohinter](Images/HintDevanagariEight.gif)
+
+Before beginning hinting we will need to add Character group information for Devanagari. 
+
+Open the Control program `ctrl + 4`. Anywhere at the begining of the Control Program type GROUP INDIC, to declare a new group, for the Devanagari glyphs. _Additional character groups can be added as needed._
+
+Compile the Control Program and save. When this is done, you will be able to select the appropriate Character group for the current glyph in the Main Window. The ‘character group’ tells VTT which group of values to use from the Control Value Table. As you add the hinting, via the Graphical User Interface hinting tools, VTT will automatically pick the correct cvt’s for heights that have been newly defined and declared as ‘INDIC’ in the Contol Value Table table. 
+
+**To change the character group to ‘Indic’ for the current glyph**
+
+From the edit menu, choose ‘Change Char group’. A shortcut for this is to press Ctrl+U. Repeat `ctrl + u`, until ‘INDIC’ is listed as the ‘Character Group’ information in the text string at the top of the main Window. 
+**Adding new cvt’s for Devanagari**
 
 Now that we have taken some measurements from the font outlines, we can build some new cvt’s for use in hinting the Devanagari. The illustration above shows four key measurements taken from representative glyphs. We can add further cvt’s when required, for any other alignment zones, that can be determined in the font.
 
 To add the new cvt’s, open the Control program. At the end of the control program add the following cvt entries, starting with the next available ID number, in this case cvt number 167. _(Because this font contains a Latin Subset, the Autohinter has already generated cvt’s for the Latin font)_
 
+To begin, declare the new cvt’s as ‘INDIC’
+
 Add four new cvt’s, for ‘Main Devanagari Flat Headline height’, ‘Round Devanagari Headline Overshoot’, ‘Devanagari Baseline’, and ‘Devanagari Baseline Undershoot’ using the measurements taken from the outlines. Compile and Save the Control Program. These new cvt’s are now available for use, and can be referenced in the VTTtalk Hinting code of individual glyphs.
 
 /***** Devanagari Height cvt’s *****/
  
- INDIC 
+ INDIC /*New cvt's delared ‘INDIC’*/
 
-      Grey
+      Grey 
 
       Y
 
@@ -127,9 +144,7 @@ ASM("CALL[], 169, 89")
 
 ## Hinting Devanagari letter GA (Unicode+0917)
 
-Let’s begin by looking at how to add hinting to Devanagari letter GA. In this example we will delete the existing Autohinting code and add the hinting via the graphical user interface. The main height controls and cvt’s added to this glyph will set the direction for adding hinting and maintaining consistent height control for other Devanagari glyphs, that share the same headline and baseline heights. Many of the glyphs in the font share a common alignment. Please refer to the [demo font](https://github.com/googlefonts/how-to-hint-non-latin-variable-fonts/tree/main/VTTSourcesDemoFont) to review and study the hinting approach. The following glyphs have have been fine-tuned, and cvt’s added. 
-
-**Hinted and fine tuned glyphs:** _(Gid 98 / Uni 0x0905), (Gid 102 / Uni 0x0909), (Gid 108 / Uni 0x090F), (Gid 149 / Uni 0x0917), (Gid 150 / Uni 0x0918), (Gid 152 / Uni 0x091A), (Gid 157 / Uni 0x091F), (Gid 159 / Uni 0x0921), (Gid 167 / Uni 0x092A), (Gid 172 / Uni 0x092F), (Gid 173 / Uni 0x0930), (Gid 174 / Uni 0x0932), (Gid 175 / Uni 0x0905)_
+Let’s begin by looking at how to add hinting to Devanagari letter GA. In this example we will delete the existing Autohinting code and add the hinting via the graphical user interface. The main height controls and cvt’s added to this glyph will set the direction for adding hinting and maintaining consistent height control for other Devanagari glyphs, that share the same headline and baseline heights. Many of the glyphs in the font share a common alignment. 
 
 **Hinting strategy**
 
@@ -343,7 +358,7 @@ Right click on the Anchor symbol associated with point 0, drag to the left to di
 YAnchor(0)
 
 **Note:** 
-_In this case VTT will try and choose the cvt closest to the baseline for Devanagari. The outline measurements of the high resolution outline differs across the variation space however. In the Thin weight point zero is positioned at a y-measurement of +13 font units, while in the Black weight point zero is positioned at a y-measurement of -3 font units, below the baseline. Moving point zero to reference a cvt in this case will work for smaller screen sizes, where there are fewer pixels, but will position point zero incorrectly at higher sizes, causing the bottom round in the Thin weight to round to low, and too high in the Heavy weight. In this case its best to use a YAnchor command, without a cvt reference, to round this feature to the grid, allowing the bottom of the y-round to round to the oulines naturally scaled outline position. This method will work for both smaller sizes, where the rounding will naturally round to the baseline, and at larger sizes, when there are more pixels available, to round to the correct position across the variation weight range._
+_In this case VTT will try and choose the cvt closest to the baseline for Devanagari. The outline measurements of the high resolution outline differs across the variation space however. In the Thin Weight point zero is positioned at a y-measurement of +13 font units, while in the Black Weight point zero is positioned at a y-measurement of -3 font units, below the baseline. Moving point zero to reference a cvt in this case will work for smaller screen sizes, where there are fewer pixels, but will position point zero incorrectly at higher sizes, causing the bottom round in the Thin weight to round to low, and too high in the Heavy weight. In this case its best to use a YAnchor command, without a cvt reference, to round this feature to the grid, allowing the bottom of the y-round to round to the oulines naturally scaled outline position. This method will work for both smaller sizes, where the rounding will naturally round to the baseline, and at larger sizes, when there are more pixels available, to round to the correct position across the variation weight range._
 
 **Control bottom round weight** 
 
@@ -416,3 +431,9 @@ _To ensure the best readable solution, accents that need it, should be hinted to
 Using inheritence, Cvt 171 is then forced to be equal to the main headline height cvt 167. This will ensure that the components, when they are used in composite glyphs, are displayed at the exact same hinted height as the main straight Headline height, for all variations. At higher sizes, when there are enough pixels, the accent can revert to using its measured height.
 
 A new cvt can be created for any group of accents or components, that share the same y-direction alignment. This will ensure that when accents are referenced in composite glyphs a consistent display and alignment will be maintained. 
+
+## Demo font NotoSerifDevanagariVF_demo.ttf
+
+Please refer to the [demo font](https://github.com/googlefonts/how-to-hint-non-latin-variable-fonts/tree/main/VTTSourcesDemoFont) to review the methods used for hinting the Noto Devanagari Variable font. A selection of the glyphs have comments on the hinting included in the VTTtalk (see list below). **Note:** _Any edits made to the hinting, using the Graphical user interface, in any of these glyphs, will result in the comments being lost.The following glyphs have have been fine-tuned, and cvt’s added_
+
+**Hinted and fine tuned glyphs:** _(Gid 98 / Uni 0x0905), (Gid 102 / Uni 0x0909), (Gid 108 / Uni 0x090F), (Gid 149 / Uni 0x0917), (Gid 150 / Uni 0x0918), (Gid 152 / Uni 0x091A), (Gid 157 / Uni 0x091F), (Gid 159 / Uni 0x0921), (Gid 167 / Uni 0x092A), (Gid 172 / Uni 0x092F), (Gid 173 / Uni 0x0930), (Gid 174 / Uni 0x0932), (Gid 175 / Uni 0x0905)_
