@@ -109,13 +109,15 @@ Now that we have taken some measurements from the font outlines, we can build so
 
 To add the new cvt’s, open the Control program. At the end of the control program add the following cvt entries, starting with the next available ID number, in this case cvt number 167. _(Because this font contains a Latin Subset, the Autohinter has already generated cvt’s for the Latin font)_
 
-To begin, declare the new cvt’s as ‘INDIC’
+To begin, declare the new cvt’s as ‘INDIC’. 
+
+**Note:** The cvt setup, for the main Devanagari heights, uses the same method as used in Latin fonts. For the Devanagari height cvt’s, Indic is declared first, then the color of the link, which is Grey, for heights, and the direction Y. ‘Square Height’ is added before the cvts for the Flat heights, _‘Flat Headline height’_ and _‘Baseline’,_ and ‘Round Height’, is added before the round overshoot heights, round _‘Devanagari Headline Overshoot’_ and round _‘Devanagari Baseline Undershoot’._ 
 
 Add four new cvt’s, for ‘Main Devanagari Flat Headline height’, ‘Round Devanagari Headline Overshoot’, ‘Devanagari Baseline’, and ‘Devanagari Baseline Undershoot’ using the measurements taken from the outlines. Compile and Save the Control Program. These new cvt’s are now available for use, and can be referenced in the VTTtalk Hinting code of individual glyphs.
 
 /***** Devanagari Height cvt’s *****/
  
- INDIC /*New cvt's delared ‘INDIC’*/
+ INDIC 
 
       Grey 
 
@@ -145,7 +147,7 @@ ASM("CALL[], 169, 89")
 
 ## Hinting Devanagari letter GA (Unicode+0917)
 
-Let’s begin by looking at how to add hinting to Devanagari letter GA. In this example we will delete the existing Autohinting code and add the hinting via the graphical user interface. The main height controls and cvt’s added to this glyph will set the direction for adding hinting and maintaining consistent height control for other Devanagari glyphs, that share the same headline and baseline heights. Many of the glyphs in the font share a common alignment. 
+Let’s begin by looking at how to add hinting to the Devanagari letter GA. In this example we will delete the existing Autohinting code and add the hinting via the graphical user interface. The main height controls and cvt’s added to this glyph will set the direction for adding hinting and maintaining consistent height control for other Devanagari glyphs, that share the same headline and baseline heights. Many of the glyphs in the font share a common alignment. 
 
 **Hinting strategy**
 
@@ -161,9 +163,9 @@ Before beginning hinting, while in the main window, set the correct ‘character
 
 Gid 149, char 0x917, ‘uni0917’, **INDIC** _(Character group information)_
 
-The ‘character group’ tells VTT which group of values to use from the Control Value Table. As you add the hinting, VTT will automatically pick the correct cvt’s for heights that have already been newly defined for Indic in the cvt table. 
+The ‘character group’ tells VTT which group of values to use from the Control Value Table. As you add the hinting, VTT will automatically pick the correct cvt’s for heights that have already been newly defined for INDIC in the cvt table. 
 
-**To change the character group to ‘Indic’ for the current glyph**
+**To change the character group to ‘INDIC’ for the current glyph**
 
 From the edit menu, choose ‘Change Char group’. A shortcut for this is to press Ctrl+U. Repeat `ctrl + u`, until ‘INDIC’ is listed as the ‘character group’ information in the text string at the top of the main Window.
 
@@ -185,17 +187,15 @@ With the Yshift Tool still selected, drag from point 26 to point 14 and from poi
  Shifts point 14, to a new position, relative to point 26’s new position maintaining the same relative distance between point 26 and point 14, and point 23, as is in the original high resolution design of the outline. Point 14 and point 23 are now positioned correctly across all variations in the design space.
 
 **A note on Hinting overlapping outlines**
- *Variable fonts are often designed with outlines that overlap. To ensure the hinted font renders correctly it is important to add hinting to points on the outline that overlap, so that these points maintain their correct position in the hinted outline. In this case, the shift command from point 26 to point 14 and 23, will ensure that point 14 and 23, maintain the correct position in the hinted outline, in the y-axis, between points 28 and 26. **Note** An alternative method to control the correct positions for these overlapping points, is to interpolate points 14, 15, 23, 24, between points 28, and 26 in the y-axis using YInterpolate(28,14,15,23,24,26). The overall effect is the same*
+ *Variable fonts are often designed with outlines that overlap. To ensure the hinted font renders correctly it is important to add hinting to points on the outline that overlap, so that these points maintain their correct position in the hinted outline. In this case, the shift command from point 26 to point 14 and 23, will ensure that point 14 and 23, maintain the correct position in the hinted outline, in the y-axis, between points 28 and 26. **Note:** An alternative method to control the correct positions for these overlapping points, is to interpolate points 14, 15, 23, 24, between points 28, and 26 in the y-axis using YInterpolate(28,14,15,23,24,26). The overall effect is the same*
 
 **Step 2: Devanagari Baseline Height Control** 
 
-With the Yshift Tool still selected from the toolbar, position the ‘blue circle’, directly over point 21, and right click. With the right mouse button held down, drag to the right to select ‘round to grid’ then release. 
+With the YShift Tool still selected from the toolbar, position the ‘blue circle’, directly over point 21, and right click. With the right mouse button held down, drag to the right to select ‘round to grid’ then release. 
 
 The following code is generated in the VTT Talk Window.
 
-**Yanchor(21, 170)**
-
-Moves point 21 to the control value listed in the ‘Control Program’, that corresponds to the Devanagari Baseline Undershoot Height, (cvt #170) and rounds this point to a grid line. (View > Control Program:  (170: -5 /* Devanagari Baseline Undershoot */)
+**Yanchor(21, 170)** Moves point 21 to the control value listed in the ‘Control Program’, that corresponds to the Devanagari Baseline Undershoot Height, (cvt #170) and rounds this point to a grid line. (View > Control Program:  (170: -5 /* Devanagari Baseline Undershoot */)
 
 **YShift(21,22)** With the Yshift Tool still selected from the toolbar, position the ‘blue circle’, directly over point 21, and drag to point 22. Shifts point 22, to a new position, relative to point 21’s new position on the grid, maintaining the same relative distance between the point 21 and point 22 as is in the original high resolution design of the outline. 
 
@@ -207,7 +207,7 @@ Choose the YInterpolate tool. Position the _‘blue circle’_, directly over po
 
 **YInterpolate(21,0,28)**
 
-The middle section is now positioned correctly, between the base line and Headline height but one more step is needed. To maintain as much contrast as possible and to reduce blur, one side of the middle element, should to be aligned to the pixel grid. Right click on point 0, drag to the right to ‘round to grid’, and release. The YInterpolate code, will be replaced with the following code.
+The middle section is now positioned correctly, between the base line and Headline height but one more step is needed. To maintain as much contrast as possible and to reduce blur, one side of the middle element, should be aligned to the pixel grid. Right click on point 0, drag to the right to ‘round to grid’, and release. The YInterpolate code, will be replaced with the following code.
 
 **YIPAnchor(21,0,28)**
 
@@ -223,7 +223,7 @@ Shifts point 7, to a new position, relative to point 0’s new position on the g
 
 The Res addition to the command ‘Anchor’, for example, stands for ‘Rendering Environment Specific’, and ensures that the appropriate rounding happens, for various rendering environments. This saves adding additional hinting commands if hinting is required to work in a variety of rendering environments. _The Res command calls a Function, that is designed to also allow for more subtle rendering of features such as undershoots and overshoots_
 
-Switch to the VTTtalk window** (`ctrl + 5`). Type Res before the YAnchor commands, Compile VTT Talk, (`ctrl + r`) and save (`ctrl + s`)
+Switch to the VTTtalk window (`ctrl + 5`). Type Res before the YAnchor commands, Compile VTT Talk, (`ctrl + r`) and save (`ctrl + s`)
 
 The final VTTtalk code, for the GA glyph, in the VTTtalk window will appear like this. The Res commands and cvt’s are highlighted here. After appending the Res commands to the YAnchors, compile the VTTtalk window and save. 
 
@@ -268,7 +268,7 @@ When new cvt’s are added, the cvt numbers will be shown graphically in the mai
 
 **Editing Autohinter code**
 
-The VTT Authinter is designed to speed up the workflow for hinting. While for Latin fonts, the Autohinter generates hinting code as well as cvt’s, the output is often still a very useful starting point when hinting complex script fonts. Lets take a look at the following example. The code structure overall that has been generated by the Autohinter for this glyph, is sound. We just need to add the appropriate Devanagari cvt’s, to the YAnchor commands, via the Graphical User hinting tools, control the overlap, and add the ‘Res’ commmand, to the YAnchor’s in the VTT Talk. 
+The VTT Autohinter is designed to speed up the workflow for hinting. While for Latin fonts, the Autohinter generates hinting code as well as cvt’s, the output is often still a very useful starting point when hinting complex script fonts. Lets take a look at the following example. The code structure overall that has been generated by the Autohinter for this glyph, is sound. We just need to add the appropriate Devanagari height cvt’s, to the YAnchor commands, via the Graphical User hinting tools, control the overlap, and add the ‘Res’ commmand, to the YAnchor’s in the VTT Talk. 
 
 From the edit menu, choose ‘Change Char group’. A shortcut for this is to press Ctrl+U. Repeat `ctrl + u`, until ‘INDIC’ is listed as the ‘character group’ information in the text string at the top of the main Window.
 
@@ -353,7 +353,7 @@ With the YShift Tool still selected from the Toolbar. Position the ‘blue circl
 
 The following code is generated in the VTT Talk Window.
 
-**YAnchor (0, 169)** Moves point 51 to the control value listed in the ‘Control Program’, that corresponds to the Devanagari Baseline (cvt #169) and rounds this point to a grid line. (View > Control Program:  (167: 623 /* Main Devanagari Flat Headline Height */)
+**YAnchor (0, 169)** Moves point 0 to the control value listed in the ‘Control Program’, that corresponds to the Devanagari Baseline (cvt #169) and rounds this point to a grid line. (View > Control Program:  (167: 623 /* Main Devanagari Flat Headline Height */)
 
 **Disable cvt selection** 
 Right click on the Anchor symbol associated with point 0, drag to the left to disable cvt selection. The following code is generated
@@ -411,7 +411,7 @@ Open the CVT Table (`ctrl + 4`) and refer to the ‘cvt’ for Headline Height, 
  
 Delta(1@12;15;20) /* Raise Headline Height globally by 1 pixel */
  
-**Note:** In Variable fonts a global Delta command can only be used, if the cvt does not vary across the Variation Space. For example, a Bolder weight variation may have a larger measured outline height. This height is edited in the ‘cvar’ _(cvt variation table)_ to reflect this difference. Because of the difference in height, the bolder weight cvt, can round differently and the ‘Delta’ to change the height for the Bold may not be required.
+**Note:** In Variable fonts a global Delta command can only be used, if the cvt does not vary across the Variation Space. For example, a Bolder weight variation may have a larger measured outline height. This height is edited in the ‘cvar’ _(cvt variation table)_ to reflect this difference. Because of the difference in height, the bolder weight cvt, can round differently and the ‘Delta’ to change the height for the Bold may not be required. Refer here for more information on [editing the CVAR Table](https://github.com/googlefonts/how-to-hint-variable-fonts#cvar--cvt-variations-table)
 
 ## Hinting components and accents
 
